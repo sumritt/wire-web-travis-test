@@ -20,6 +20,9 @@ notifications:
 #  - if [ "$TRAVIS_BRANCH" == "staging" ]; then yarn build:prod; fi
 #  - if [ "$TRAVIS_BRANCH" == "prod" ]; then yarn build:prod || { echo 'contents of npm-debug.log:' && cat /home/travis/build/wireapp/wire-webapp/npm-debug.log && exit 1; } fi
 
+stages:
+  - deploy
+
 jobs:
   include:
     - stage: deploy
