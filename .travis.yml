@@ -20,24 +20,25 @@ notifications:
 #  - if [ "$TRAVIS_BRANCH" == "staging" ]; then yarn build:prod; fi
 #  - if [ "$TRAVIS_BRANCH" == "prod" ]; then yarn build:prod || { echo 'contents of npm-debug.log:' && cat /home/travis/build/wireapp/wire-webapp/npm-debug.log && exit 1; } fi
 
-# https://github.com/travis-ci/dpl#elastic-beanstalk
-deploy:
-  - provider: script
-    script: "echo 'deployed!'"
-    on:
-      tags: true
-      condition: $TRAVIS_TAG =~ .*-staging.*
+jobs:
+  include:
+    - stage: deploy
+      if: tag =~ .*-staging.*
+      deploy:
+      - provider: script
+        script: "echo 'deployed!'"
+        condition: tag =~ .*-staging.*
 
-after_deploy:
-  - |
-    if [ "${TRAVIS_BRANCH}" == "staging" ] && [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_EVENT_TYPE}" == "push" ]; then
-        echo "deployment done"
-    fi
-
-after_failure:
-  - |
-    if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
-      if [[ "${TRAVIS_BRANCH}" =~ ^(dev|prod|staging)$ ]]; then
-        echo "failed to deploy"
-      fi
-    fi
+# after_deploy:
+#   - |
+#     if [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_EVENT_TYPE}" == "push" ]; then
+#         echo "deployment done"
+#     fi
+#
+# after_failure:
+#   - |
+#     if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+#       if [[ "${TRAVIS_BRANCH}" =~ ^(dev|prod|staging|master)$ ]]; then
+#         echo "failed to deploy"
+#       fi
+#     fi
