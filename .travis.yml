@@ -29,6 +29,7 @@ jobs:
       deploy:
       - provider: script
         script: "echo 'deployed!'"
+        tags: true
 
 # after_deploy:
 #   - |
